@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Person from './Person/Person';
+import Radium, { StyleRoot } from 'radium';
 import './App.css';
 
 class App extends Component {
@@ -61,13 +62,18 @@ class App extends Component {
   render() {
     const { people, showPeople } = this.state;
 
+    // Installing Radium here allows us to use the :hover and all pseudo-selectors
     const styles = {
       backgroundColor: 'green',
       color: 'white',
       font: 'inherit',
       border: '1px solid black',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     }
 
     let peopleIsVisible = null;
@@ -94,19 +100,25 @@ class App extends Component {
         </div>
       );
       styles.backgroundColor = 'red';
+      styles[':hover'] = {
+        backgroundColor: 'pink'
+      }
     }
 
     return (
-      <div className="App">
-        <h1>React Life</h1>
-        <p className={classes.join(' ')}>It's twerking.</p>
-        <button 
-          style={styles} 
-          onClick={this.togglePeopleHandler}>Toggle People</button>
-        {peopleIsVisible}
-      </div>
+      // StyleRoot is provided and needed by Radium in order to render media queries and keyframes etc -- not needed for pseudo selectors
+      <StyleRoot>
+        <div className="App">
+          <h1>React Life</h1>
+          <p className={classes.join(' ')}>It's twerking.</p>
+          <button 
+            style={styles} 
+            onClick={this.togglePeopleHandler}>Toggle People</button>
+          {peopleIsVisible}
+        </div>        
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
